@@ -23,14 +23,14 @@ public class ZoneTests
     [InlineData("01234")]
     [InlineData("abcde")]
     public void Bad_postcodes_are_rejected(string? text)
-        => Assert.Equal("InvalidPostcode", Assert.Throws<DomainException>(() => Postcodes.Parse(text)).Code);
+        => Assert.Equal("InvalidPostcode", Assert.ThrowsAny<DomainException>(() => Postcodes.Parse(text)).Code);
 
     [Theory]
     [InlineData(9999, 11000)]
     [InlineData(11000, 100000)]
     [InlineData(12000, 11000)]
     public void Bad_ranges_are_rejected(int from, int to)
-        => Assert.Throws<DomainException>(() => new PostcodeRange(from, to));
+        => Assert.ThrowsAny<DomainException>(() => new PostcodeRange(from, to));
 
     [Theory]
     [InlineData(11100, true)]   // first postcode in the range
@@ -48,7 +48,7 @@ public class ZoneTests
     [InlineData(10000, 99999)]  // around
     public void Overlap_between_zones_is_rejected(int from, int to)
     {
-        var ex = Assert.Throws<DomainException>(() =>
+        var ex = Assert.ThrowsAny<DomainException>(() =>
             ZoneRules.EnsureNoOverlap([Zone("City", (11100, 11899)), Zone("Other", (from, to))]));
         Assert.Equal("PostcodeOverlap", ex.Code);
     }
@@ -59,7 +59,7 @@ public class ZoneTests
 
     [Fact]
     public void Overlap_inside_one_zone_is_rejected()
-        => Assert.Throws<DomainException>(() => Zone("City", (11100, 11899), (11500, 12000)));
+        => Assert.ThrowsAny<DomainException>(() => Zone("City", (11100, 11899), (11500, 12000)));
 
     [Fact]
     public void Lookup_finds_the_zone_for_a_postcode_or_nothing()

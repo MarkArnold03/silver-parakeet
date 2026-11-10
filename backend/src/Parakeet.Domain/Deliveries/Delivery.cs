@@ -43,7 +43,7 @@ public class Delivery
     public void Book(Guid slotId, Actor actor, DateTimeOffset now)
     {
         if (!DeliveryStatusRules.CanBook(Status))
-            throw new DomainException("RebookNotAllowed", $"A delivery that is {Status} can't be booked or rebooked.");
+            throw new ConflictException("RebookNotAllowed", $"A delivery that is {Status} can't be booked or rebooked.");
         if (SlotId == slotId && Status is DeliveryStatus.Booked or DeliveryStatus.Planned)
             return;
 
@@ -61,7 +61,7 @@ public class Delivery
     public void AssignToRoute(Guid routeId, int stopSequence, Actor actor, DateTimeOffset now)
     {
         if (!DeliveryStatusRules.CanAssign(Status))
-            throw new DomainException("AssignNotAllowed", $"A delivery that is {Status} can't be put on a route.");
+            throw new ConflictException("AssignNotAllowed", $"A delivery that is {Status} can't be put on a route.");
 
         var from = Status;
         RouteId = routeId;
@@ -73,7 +73,7 @@ public class Delivery
     public void Unassign(Actor actor, string? reason, DateTimeOffset now)
     {
         if (Status != DeliveryStatus.Planned)
-            throw new DomainException("UnassignNotAllowed", $"A delivery that is {Status} can't be taken off its route.");
+            throw new ConflictException("UnassignNotAllowed", $"A delivery that is {Status} can't be taken off its route.");
 
         RouteId = null;
         StopSequence = null;
@@ -84,7 +84,7 @@ public class Delivery
     public void SetStopSequence(int stopSequence)
     {
         if (RouteId is null)
-            throw new DomainException("NotOnRoute", "Only a delivery on a route has a stop number.");
+            throw new ConflictException("NotOnRoute", "Only a delivery on a route has a stop number.");
         StopSequence = stopSequence;
     }
 
@@ -92,7 +92,7 @@ public class Delivery
     public void ChangeStatus(DeliveryStatus to, Actor actor, string? reason, DateTimeOffset now)
     {
         if (!DeliveryStatusRules.CanChangeStatus(Status, to))
-            throw new DomainException("IllegalTransition", $"A delivery can't go from {Status} to {to}.");
+            throw new ConflictException("IllegalTransition", $"A delivery can't go from {Status} to {to}.");
 
         var from = Status;
         if (to == DeliveryStatus.Failed)

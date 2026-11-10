@@ -58,7 +58,7 @@ public class DeliveryStatusTests
         }
         else
         {
-            var ex = Assert.Throws<DomainException>(act);
+            var ex = Assert.ThrowsAny<DomainException>(act);
             Assert.Equal("IllegalTransition", ex.Code);
             Assert.Equal(from, d.Status);
         }
@@ -70,7 +70,7 @@ public class DeliveryStatusTests
     public void Failed_needs_a_reason(string? reason)
     {
         var d = TestData.DeliveryIn(OutForDelivery);
-        Assert.Throws<DomainException>(() => d.ChangeStatus(Failed, TestData.Dispatcher, reason, Now));
+        Assert.ThrowsAny<DomainException>(() => d.ChangeStatus(Failed, TestData.Dispatcher, reason, Now));
         Assert.Equal(OutForDelivery, d.Status);
     }
 
@@ -111,7 +111,7 @@ public class DeliveryStatusTests
         }
         else
         {
-            var ex = Assert.Throws<DomainException>(() => d.Book(newSlot, Actor.Customer, Now));
+            var ex = Assert.ThrowsAny<DomainException>(() => d.Book(newSlot, Actor.Customer, Now));
             Assert.Equal("RebookNotAllowed", ex.Code);
         }
     }
@@ -160,7 +160,7 @@ public class DeliveryStatusTests
     public void Assign_needs_a_booked_or_planned_delivery(DeliveryStatus from)
     {
         var d = TestData.DeliveryIn(from);
-        Assert.Throws<DomainException>(() => d.AssignToRoute(Guid.NewGuid(), 1, TestData.Dispatcher, Now));
+        Assert.ThrowsAny<DomainException>(() => d.AssignToRoute(Guid.NewGuid(), 1, TestData.Dispatcher, Now));
     }
 
     [Fact]
@@ -177,7 +177,7 @@ public class DeliveryStatusTests
         Assert.Null(d.RouteId);
         Assert.Equal("Truck broke down", d.Events.Last().Reason);
 
-        Assert.Throws<DomainException>(() => d.Unassign(TestData.Dispatcher, null, Now));
+        Assert.ThrowsAny<DomainException>(() => d.Unassign(TestData.Dispatcher, null, Now));
     }
 
     [Fact]

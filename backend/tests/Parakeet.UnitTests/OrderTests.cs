@@ -32,7 +32,7 @@ public class OrderTests
     [Fact]
     public void An_order_needs_at_least_one_line()
     {
-        var ex = Assert.Throws<DomainException>(() => new Order(
+        var ex = Assert.ThrowsAny<DomainException>(() => new Order(
             Guid.NewGuid(), "REF", new Recipient("A", "1", null), new Address("S 1", "11455", "Sthlm"),
             DeliveryType.Doorstep, [], new string('a', 64), TestData.Now));
         Assert.Equal("NoLines", ex.Code);
@@ -44,13 +44,13 @@ public class OrderTests
     [InlineData(1, -0.001, 1)]
     [InlineData(1, 1, -0.01)]
     public void Lines_reject_bad_numbers(int quantity, double volume, double weight)
-        => Assert.Throws<DomainException>(() => new OrderLine("A", "B", quantity, (decimal)volume, (decimal)weight));
+        => Assert.ThrowsAny<DomainException>(() => new OrderLine("A", "B", quantity, (decimal)volume, (decimal)weight));
 
     [Fact]
     public void Required_text_is_trimmed_and_checked()
     {
         Assert.Equal("Anna", new Recipient("  Anna ", "070", null).Name);
         Assert.Null(new Recipient("Anna", "070", "  ").Email);
-        Assert.Throws<DomainException>(() => new Recipient(" ", "070", null));
+        Assert.ThrowsAny<DomainException>(() => new Recipient(" ", "070", null));
     }
 }
