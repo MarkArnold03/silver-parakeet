@@ -12,6 +12,18 @@ using Parakeet.Domain.Zones;
 
 namespace Parakeet.Application;
 
+/// <summary>Disposing without calling Commit rolls everything back.</summary>
+public interface ILockedTransaction : IAsyncDisposable
+{
+    Task CommitAsync(CancellationToken cancellationToken = default);
+}
+
+public static class LockKeys
+{
+    public static string ZoneDay(Guid zoneId, DateOnly date) => $"zoneday:{zoneId:N}:{date:yyyyMMdd}";
+    public const string Zones = "zones";
+}
+
 /// <summary>What application services see of the database. Implemented by AppDbContext in Infrastructure.</summary>
 public interface IAppDbContext
 {
@@ -34,4 +46,10 @@ public interface IAppDbContext
     DbSet<RefreshToken> RefreshTokens { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Starts a database transaction and takes the named locks. Anyone else asking for one of the same
+    /// names waits until this transaction ends. Used where "check, then write" must not be interleaved.
+    /// </summary>
+    Task<ILockedTransaction> BeginLockedTransactionAsync(IEnumerable<string> lockKeys, CancellationToken cancellationToken = default);
 }

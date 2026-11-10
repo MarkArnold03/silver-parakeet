@@ -41,4 +41,36 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) => ModelConfiguration.Apply(modelBuilder);
+
+    public async Task<ILockedTransaction> BeginLockedTransactionAsync(IEnumerable<string> lockKeys, CancellationToken cancellationToken = default)
+    {
+        var transaction = await Database.BeginTransactionAsync(cancellationToken);
+        try
+        {
+            // Sorted, so every caller takes shared locks in the same order and two callers can never
+            // each hold one lock while waiting for the other's (a deadlock).
+            foreach (var key in lockKeys.Distinct().Order(StringComparer.Ordinal))
+            {
+                // sp_getapplock: a named lock in SQL Server. Owner "Transaction" means it is released
+                // automatically on commit or rollback, so it can't be left behind by a crash.
+                await Database.ExecuteSqlAsync($"""
+                    DECLARE @result int;
+                    EXEC @result = sp_getapplock @Resource = {key}, @LockMode = 'Exclusive', @LockOwner = 'Transaction', @LockTimeout = 15000;
+                    IF @result < 0 THROW 51000, 'Could not get the lock in time.', 1;
+                    """, cancellationToken);
+            }
+            return new LockedTransaction(transaction);
+        }
+        catch
+        {
+            await transaction.DisposeAsync();
+            throw;
+        }
+    }
+
+    private sealed class LockedTransaction(Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction transaction) : ILockedTransaction
+    {
+        public Task CommitAsync(CancellationToken cancellationToken = default) => transaction.CommitAsync(cancellationToken);
+        public ValueTask DisposeAsync() => transaction.DisposeAsync();
+    }
 }

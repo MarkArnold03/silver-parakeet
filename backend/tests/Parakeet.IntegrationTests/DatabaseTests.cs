@@ -192,9 +192,11 @@ public class DatabaseTests(SqlServerFixture sql)
     {
         await using var db = SqlServerFixture.Context(await sql.MigratedDatabaseAsync());
 
-        await DevSeeder.SeedAsync(db, TimeProvider.System);
-        await DevSeeder.SeedAsync(db, TimeProvider.System); // second run must not duplicate anything
+        var hasher = new Microsoft.AspNetCore.Identity.PasswordHasher<Domain.Users.User>();
+        await DevSeeder.SeedAsync(db, TimeProvider.System, hasher);
+        await DevSeeder.SeedAsync(db, TimeProvider.System, hasher); // second run must not duplicate anything
 
+        Assert.Equal(1, await db.Users.CountAsync());
         Assert.Equal(2, await db.Zones.CountAsync());
         Assert.Equal(3, await db.Trucks.CountAsync());
         Assert.Equal(3, await db.Deliveries.CountAsync());

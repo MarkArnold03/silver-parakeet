@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Parakeet.Domain.Deliveries;
 using Parakeet.Domain.Merchants;
@@ -7,6 +8,7 @@ using Parakeet.Domain.Orders;
 using Parakeet.Domain.Payments;
 using Parakeet.Domain.Slots;
 using Parakeet.Domain.Trucks;
+using Parakeet.Domain.Users;
 using Parakeet.Domain.Zones;
 
 namespace Parakeet.Infrastructure.Persistence;
@@ -20,8 +22,20 @@ public static class DevSeeder
     /// <summary>Not a secret: it only exists in databases created by this seeder.</summary>
     public const string DevMerchantApiKey = "pk_dev_parakeet_local_only";
 
-    public static async Task SeedAsync(AppDbContext db, TimeProvider time, CancellationToken ct = default)
+    public const string DevUserEmail = "dispatcher@parakeet.local";
+    public const string DevUserPassword = "parakeet-dev";
+
+    public static async Task SeedAsync(AppDbContext db, TimeProvider time, IPasswordHasher<User> passwordHasher,
+        CancellationToken ct = default)
     {
+        if (!await db.Users.AnyAsync(ct))
+        {
+            var user = new User(DevUserEmail, "Dev Dispatcher", UserRole.Admin);
+            user.SetPasswordHash(passwordHasher.HashPassword(user, DevUserPassword));
+            db.Users.Add(user);
+            await db.SaveChangesAsync(ct);
+        }
+
         if (await db.Zones.AnyAsync(ct))
             return;
 

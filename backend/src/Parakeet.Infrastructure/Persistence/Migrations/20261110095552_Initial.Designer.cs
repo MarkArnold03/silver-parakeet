@@ -12,7 +12,7 @@ using Parakeet.Infrastructure.Persistence;
 namespace Parakeet.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20261110093257_Initial")]
+    [Migration("20261110095552_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -523,6 +523,7 @@ namespace Parakeet.Infrastructure.Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset?>("RevokedAt")
+                        .IsConcurrencyToken()
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("TokenHash")

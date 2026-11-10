@@ -16,9 +16,9 @@ Mark wants to understand every step. In every session:
 
 - `backend/`: .NET 10 solution `Parakeet.sln`. Dependencies point inward: Api → Infrastructure → Application → Domain.
   - `Parakeet.Domain`: entities and rules. No EF, no ASP.NET. Rules are tested here without a database.
-  - `Parakeet.Application`: use cases, `IAppDbContext`.
+  - `Parakeet.Application`: one service per area (`BookingService`, `SlotService`, `ZoneService`, `TruckService`, `AuthService`), `IAppDbContext`.
   - `Parakeet.Infrastructure`: EF Core `AppDbContext`, table mapping in `Persistence/ModelConfiguration.cs`, migrations, `DevSeeder`.
-  - `Parakeet.Api`: `Program.cs`, endpoints.
+  - `Parakeet.Api`: `Program.cs`, `Endpoints/` (minimal APIs), `ErrorHandling.cs`.
 - `frontend/`: not started yet (slice 3).
 
 ## Commands
@@ -32,6 +32,7 @@ Run from `backend/`:
   `dotnet ef migrations add <Name> -p src/Parakeet.Infrastructure -o Persistence/Migrations`
 - Run locally: `docker compose up -d` in the repo root, then `dotnet run --project src/Parakeet.Api`.
   In Development the API migrates the database and seeds sample data on start.
+  Dev login: `dispatcher@parakeet.local` / `parakeet-dev` (created by `DevSeeder`, Development only).
 
 In a Claude Code cloud session the Docker daemon is not started automatically. Start it with `dockerd` as a
 background process before running integration tests. The .NET SDK comes from `apt-get install dotnet-sdk-10.0`.
@@ -43,4 +44,12 @@ background process before running integration tests. The .NET SDK comes from `ap
 - Entity ids are Guid v7 created in constructors. Enums are stored as strings. Money is `long` öre.
 - "Now" always comes from `TimeProvider`, never `DateTime.Now`.
 - Foreign keys never cascade deletes, except owned data (a zone's postcode ranges).
+- Exceptions decide the HTTP status in one place (`Parakeet.Api/ErrorHandling.cs`): `NotFoundException` 404,
+  `ConflictException` 409, `UnauthorizedException` 401, any other `DomainException` 400.
+- Anything that checks zone-day capacity and then writes (booking, slot changes, zone-day trucks) runs inside
+  `BeginLockedTransactionAsync([LockKeys.ZoneDay(zoneId, date)])`. Read the data you check after taking the lock.
+- Settings live in `appsettings.json` sections `Booking` and `Auth`, read through `IOptions`. Secrets
+  (`Auth:JwtSigningKey`, connection string) come from environment variables outside Development.
+- Integration tests: `Scenario` builds data for service-level tests, `ApiTestBase` starts the real API in memory.
+  A new race test must be shown to fail with the lock switched off before it is trusted.
 - A slice is not done until CI is green on the pushed commit. Report the CI result to Mark.

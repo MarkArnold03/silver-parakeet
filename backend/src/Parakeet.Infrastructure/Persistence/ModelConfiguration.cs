@@ -221,6 +221,8 @@ internal static class ModelConfiguration
         {
             e.Property(x => x.TokenHash).HasMaxLength(64).IsUnicode(false);
             e.HasIndex(x => x.TokenHash).IsUnique();
+            // Makes "mark as used" succeed for only one of two simultaneous requests with the same token.
+            e.Property(x => x.RevokedAt).IsConcurrencyToken();
             e.HasOne<User>().WithMany().HasForeignKey(x => x.UserId);
             e.HasOne<RefreshToken>().WithMany().HasForeignKey(x => x.ReplacedById);
         });
