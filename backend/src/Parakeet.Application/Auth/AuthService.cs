@@ -56,7 +56,14 @@ public class AuthService(
                 next = await db.RefreshTokens.SingleOrDefaultAsync(t => t.Id == id, ct);
                 next?.Revoke(now);
             }
-            await db.SaveChangesAsync(ct);
+            try
+            {
+                await db.SaveChangesAsync(ct);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                // Another request revoked the same tokens a moment ago. That is the result we wanted.
+            }
             throw new UnauthorizedException("RefreshTokenReused", "Please log in again.");
         }
         if (token.ExpiresAt <= now)
