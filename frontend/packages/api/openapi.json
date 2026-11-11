@@ -1,0 +1,1645 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "Parakeet.Api | v1",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": [
+          "Parakeet.Api"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/refresh": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/trucks": {
+      "get": {
+        "tags": [
+          "Trucks"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TruckDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Trucks"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TruckRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TruckDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/trucks/{id}": {
+      "get": {
+        "tags": [
+          "Trucks"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TruckDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Trucks"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TruckRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TruckDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/zones": {
+      "get": {
+        "tags": [
+          "Zones"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ZoneDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Zones"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ZoneRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZoneDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/zones/{id}": {
+      "get": {
+        "tags": [
+          "Zones"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZoneDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Zones"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ZoneRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZoneDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Zones"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/slots": {
+      "get": {
+        "tags": [
+          "Slots"
+        ],
+        "parameters": [
+          {
+            "name": "zoneId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SlotDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/slots/generate": {
+      "post": {
+        "tags": [
+          "Slots"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateSlotsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerateSlotsResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/slots/{id}": {
+      "put": {
+        "tags": [
+          "Slots"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSlotRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SlotDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Slots"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/zone-days": {
+      "get": {
+        "tags": [
+          "Zone days"
+        ],
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "zoneId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ZoneDayDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/zone-days/{zoneId}/{date}/trucks": {
+      "put": {
+        "tags": [
+          "Zone days"
+        ],
+        "parameters": [
+          {
+            "name": "zoneId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "date",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetZoneDayTrucksRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZoneDayDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/merchants": {
+      "get": {
+        "tags": [
+          "Merchants"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MerchantDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Merchants"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MerchantRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MerchantWithKeyDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/merchants/{id}/api-key": {
+      "post": {
+        "tags": [
+          "Merchants"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MerchantWithKeyDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/deliveries/{id}/link": {
+      "post": {
+        "tags": [
+          "Deliveries"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerLinkDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/merchant/orders": {
+      "post": {
+        "tags": [
+          "Merchant"
+        ],
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrderRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderDto"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/merchant/orders/{merchantOrderRef}": {
+      "get": {
+        "tags": [
+          "Merchant"
+        ],
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "merchantOrderRef",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/customer/delivery": {
+      "get": {
+        "tags": [
+          "Customer"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerDeliveryDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/customer/slots": {
+      "get": {
+        "tags": [
+          "Customer"
+        ],
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AvailableSlot"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/customer/delivery/slot": {
+      "put": {
+        "tags": [
+          "Customer"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BookSlotRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerDeliveryDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AddressRequest": {
+        "required": [
+          "street",
+          "postcode",
+          "city"
+        ],
+        "type": "object",
+        "properties": {
+          "street": {
+            "type": "string"
+          },
+          "postcode": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          }
+        }
+      },
+      "AvailableSlot": {
+        "required": [
+          "id",
+          "date",
+          "start",
+          "end"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "start": {
+            "type": "string",
+            "format": "time"
+          },
+          "end": {
+            "type": "string",
+            "format": "time"
+          }
+        }
+      },
+      "BookSlotRequest": {
+        "required": [
+          "slotId"
+        ],
+        "type": "object",
+        "properties": {
+          "slotId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "CreateOrderRequest": {
+        "required": [
+          "merchantOrderRef",
+          "recipient",
+          "address",
+          "deliveryType",
+          "lines"
+        ],
+        "type": "object",
+        "properties": {
+          "merchantOrderRef": {
+            "type": "string"
+          },
+          "recipient": {
+            "$ref": "#/components/schemas/RecipientRequest"
+          },
+          "address": {
+            "$ref": "#/components/schemas/AddressRequest"
+          },
+          "deliveryType": {
+            "$ref": "#/components/schemas/DeliveryType"
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderLineRequest"
+            }
+          }
+        }
+      },
+      "CustomerDeliveryDto": {
+        "required": [
+          "orderNumber",
+          "status",
+          "deliveryType",
+          "recipientName",
+          "street",
+          "postcode",
+          "city",
+          "lines",
+          "slot",
+          "canChangeSlot",
+          "linkValidThrough"
+        ],
+        "type": "object",
+        "properties": {
+          "orderNumber": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "status": {
+            "$ref": "#/components/schemas/DeliveryStatus"
+          },
+          "deliveryType": {
+            "$ref": "#/components/schemas/DeliveryType"
+          },
+          "recipientName": {
+            "type": "string"
+          },
+          "street": {
+            "type": "string"
+          },
+          "postcode": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomerLineDto"
+            }
+          },
+          "slot": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/AvailableSlot"
+              }
+            ]
+          },
+          "canChangeSlot": {
+            "type": "boolean"
+          },
+          "linkValidThrough": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "CustomerLineDto": {
+        "required": [
+          "description",
+          "quantity"
+        ],
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "CustomerLinkDto": {
+        "required": [
+          "customerLink"
+        ],
+        "type": "object",
+        "properties": {
+          "customerLink": {
+            "type": "string"
+          }
+        }
+      },
+      "DayOfWeek": {
+        "enum": [
+          "Sunday",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday"
+        ]
+      },
+      "DeliveryStatus": {
+        "enum": [
+          "AwaitingBooking",
+          "Booked",
+          "Planned",
+          "Loaded",
+          "OutForDelivery",
+          "Delivered",
+          "Failed"
+        ]
+      },
+      "DeliveryType": {
+        "enum": [
+          "Curbside",
+          "Doorstep"
+        ]
+      },
+      "GenerateSlotsRequest": {
+        "required": [
+          "zoneId",
+          "from",
+          "to",
+          "weekdays",
+          "windows",
+          "maxDeliveries"
+        ],
+        "type": "object",
+        "properties": {
+          "zoneId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "from": {
+            "type": "string",
+            "format": "date"
+          },
+          "to": {
+            "type": "string",
+            "format": "date"
+          },
+          "weekdays": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/components/schemas/DayOfWeek"
+            }
+          },
+          "windows": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/components/schemas/TimeWindow"
+            }
+          },
+          "maxDeliveries": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GenerateSlotsResult": {
+        "required": [
+          "created",
+          "skipped"
+        ],
+        "type": "object",
+        "properties": {
+          "created": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "skipped": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GeocodeStatus": {
+        "enum": [
+          "Pending",
+          "Ok",
+          "Failed"
+        ]
+      },
+      "LoginRequest": {
+        "required": [
+          "email",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "LoginResponse": {
+        "required": [
+          "accessToken",
+          "expiresAt",
+          "user"
+        ],
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserDto"
+          }
+        }
+      },
+      "MerchantDto": {
+        "required": [
+          "id",
+          "name",
+          "apiKeyPrefix",
+          "isActive"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "apiKeyPrefix": {
+            "type": "string"
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        }
+      },
+      "MerchantRequest": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "MerchantWithKeyDto": {
+        "required": [
+          "merchant",
+          "apiKey"
+        ],
+        "type": "object",
+        "properties": {
+          "merchant": {
+            "$ref": "#/components/schemas/MerchantDto"
+          },
+          "apiKey": {
+            "type": "string"
+          }
+        }
+      },
+      "OrderDto": {
+        "required": [
+          "orderNumber",
+          "merchantOrderRef",
+          "status",
+          "geocodeStatus",
+          "customerLink"
+        ],
+        "type": "object",
+        "properties": {
+          "orderNumber": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "merchantOrderRef": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/DeliveryStatus"
+          },
+          "geocodeStatus": {
+            "$ref": "#/components/schemas/GeocodeStatus"
+          },
+          "customerLink": {
+            "type": "string"
+          }
+        }
+      },
+      "OrderLineRequest": {
+        "required": [
+          "articleNumber",
+          "description",
+          "quantity",
+          "unitVolumeM3",
+          "unitWeightKg"
+        ],
+        "type": "object",
+        "properties": {
+          "articleNumber": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "unitVolumeM3": {
+            "type": "number",
+            "format": "double"
+          },
+          "unitWeightKg": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "PostcodeRangeDto": {
+        "required": [
+          "from",
+          "to"
+        ],
+        "type": "object",
+        "properties": {
+          "from": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "to": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "RecipientRequest": {
+        "required": [
+          "name",
+          "phone",
+          "email"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "email": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "SetZoneDayTrucksRequest": {
+        "required": [
+          "truckIds"
+        ],
+        "type": "object",
+        "properties": {
+          "truckIds": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        }
+      },
+      "SlotDto": {
+        "required": [
+          "id",
+          "zoneId",
+          "date",
+          "start",
+          "end",
+          "maxDeliveries",
+          "isClosed",
+          "bookedCount"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "zoneId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "start": {
+            "type": "string",
+            "format": "time"
+          },
+          "end": {
+            "type": "string",
+            "format": "time"
+          },
+          "maxDeliveries": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isClosed": {
+            "type": "boolean"
+          },
+          "bookedCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "TimeWindow": {
+        "required": [
+          "start",
+          "end"
+        ],
+        "type": "object",
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "time"
+          },
+          "end": {
+            "type": "string",
+            "format": "time"
+          }
+        }
+      },
+      "TruckDto": {
+        "required": [
+          "id",
+          "name",
+          "plate",
+          "capacityM3",
+          "capacityKg",
+          "isActive"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "plate": {
+            "type": "string"
+          },
+          "capacityM3": {
+            "type": "number",
+            "format": "double"
+          },
+          "capacityKg": {
+            "type": "number",
+            "format": "double"
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        }
+      },
+      "TruckRequest": {
+        "required": [
+          "name",
+          "plate",
+          "capacityM3",
+          "capacityKg"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "plate": {
+            "type": "string"
+          },
+          "capacityM3": {
+            "type": "number",
+            "format": "double"
+          },
+          "capacityKg": {
+            "type": "number",
+            "format": "double"
+          },
+          "isActive": {
+            "type": "boolean",
+            "default": true
+          }
+        }
+      },
+      "UpdateSlotRequest": {
+        "required": [
+          "maxDeliveries",
+          "isClosed"
+        ],
+        "type": "object",
+        "properties": {
+          "maxDeliveries": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isClosed": {
+            "type": "boolean"
+          }
+        }
+      },
+      "UserDto": {
+        "required": [
+          "id",
+          "email",
+          "name",
+          "role"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "email": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "$ref": "#/components/schemas/UserRole"
+          }
+        }
+      },
+      "UserRole": {
+        "enum": [
+          "Dispatcher",
+          "Admin"
+        ]
+      },
+      "ZoneDayDto": {
+        "required": [
+          "zoneId",
+          "date",
+          "truckIds",
+          "truckM3",
+          "truckKg",
+          "sellableM3",
+          "sellableKg",
+          "reservedM3",
+          "reservedKg",
+          "isOversold"
+        ],
+        "type": "object",
+        "properties": {
+          "zoneId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "truckIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "truckM3": {
+            "type": "number",
+            "format": "double"
+          },
+          "truckKg": {
+            "type": "number",
+            "format": "double"
+          },
+          "sellableM3": {
+            "type": "number",
+            "format": "double"
+          },
+          "sellableKg": {
+            "type": "number",
+            "format": "double"
+          },
+          "reservedM3": {
+            "type": "number",
+            "format": "double"
+          },
+          "reservedKg": {
+            "type": "number",
+            "format": "double"
+          },
+          "isOversold": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ZoneDto": {
+        "required": [
+          "id",
+          "name",
+          "postcodeRanges"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "postcodeRanges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PostcodeRangeDto"
+            }
+          }
+        }
+      },
+      "ZoneRequest": {
+        "required": [
+          "name",
+          "postcodeRanges"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "postcodeRanges": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/components/schemas/PostcodeRangeDto"
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Parakeet.Api"
+    },
+    {
+      "name": "Auth"
+    },
+    {
+      "name": "Trucks"
+    },
+    {
+      "name": "Zones"
+    },
+    {
+      "name": "Slots"
+    },
+    {
+      "name": "Zone days"
+    },
+    {
+      "name": "Merchants"
+    },
+    {
+      "name": "Deliveries"
+    },
+    {
+      "name": "Merchant"
+    },
+    {
+      "name": "Customer"
+    }
+  ]
+}

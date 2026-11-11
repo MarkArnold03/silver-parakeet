@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text.Json.Serialization;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -18,8 +19,13 @@ using Parakeet.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("Default")
-    ?? throw new InvalidOperationException("Connection string 'Default' is missing.");
+// True only while "dotnet build" starts the app to write openapi.json. There is no database and
+// no settings then, and nothing is served, so the parts that need them are skipped.
+var writingApiDescription = Assembly.GetEntryAssembly()?.GetName().Name == "GetDocument.Insider";
+
+var connectionString = builder.Configuration.GetConnectionString("Default") ?? "";
+if (connectionString == "" && !writingApiDescription)
+    throw new InvalidOperationException("Connection string 'Default' is missing.");
 var auth = builder.Configuration.GetSection("Auth").Get<AuthOptions>() ?? new AuthOptions();
 var customerLinks = builder.Configuration.GetSection("CustomerLinks").Get<CustomerLinkOptions>() ?? new CustomerLinkOptions();
 
@@ -34,7 +40,12 @@ builder.Services.AddOpenApi();
 builder.Services.AddValidation();
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<ErrorHandler>();
-builder.Services.ConfigureHttpJsonOptions(o => o.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+builder.Services.ConfigureHttpJsonOptions(o =>
+{
+    o.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    // A number must be sent as a number, not as "5". Keeps the API description (and the frontend's types) exact.
+    o.SerializerOptions.NumberHandling = JsonNumberHandling.Strict;
+});
 
 // Dispatchers prove who they are with a signed access token (JWT) on every request.
 // Customers prove which delivery they may see with the token from their link. It is a second, separate
@@ -80,7 +91,7 @@ builder.Services.AddRateLimiter(o =>
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() && !writingApiDescription)
 {
     app.MapOpenApi(); // the API description, at /openapi/v1.json
 

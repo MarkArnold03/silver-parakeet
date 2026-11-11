@@ -480,3 +480,9 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# The NuGet rule above ("**/[Pp]ackages/*") would also hide the frontend's own packages folder.
+!frontend/packages/
+!frontend/packages/**
+node_modules/
+dist/

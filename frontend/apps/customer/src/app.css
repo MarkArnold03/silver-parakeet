@@ -1,0 +1,226 @@
+/* Layout for the customer app. Colours and shared components come from @parakeet/ui. */
+.page {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100dvh;
+}
+
+.page__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 20px var(--pk-gap) 28px;
+  background: var(--pk-teal-600);
+  color: #fff;
+}
+
+.page__header h1 {
+  font-size: 1.35rem;
+}
+
+.page__header p {
+  opacity: 0.9;
+}
+
+.page__lang {
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid rgb(255 255 255 / 0.6);
+  border-radius: 999px;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.page__lang:focus-visible {
+  outline-color: #fff;
+}
+
+.page__main {
+  display: grid;
+  gap: var(--pk-gap);
+  /* room for the bottom navigation and, on the Plan page, the confirm button above it */
+  padding: 0 var(--pk-gap) 150px;
+  margin-top: -12px;
+}
+
+.page__title {
+  font-size: 1.15rem;
+  margin-top: 24px;
+}
+
+.hero {
+  display: grid;
+  gap: 6px;
+  padding: 20px var(--pk-gap);
+  background: var(--pk-surface);
+  border: 1px solid var(--pk-line);
+  border-radius: var(--pk-radius);
+}
+
+.hero h2 {
+  font-size: 1.05rem;
+}
+
+.hero__status {
+  justify-self: start;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--pk-teal-100);
+  color: var(--pk-teal-700);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.hero__day {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.hero__day::first-letter {
+  text-transform: uppercase;
+}
+
+.hero__time {
+  font-size: 1.25rem;
+  color: var(--pk-teal-700);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.hero .pk-button {
+  margin-top: 12px;
+}
+
+.items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.items li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-top: 1px solid var(--pk-line);
+}
+
+.items li:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.items li span:last-child {
+  white-space: nowrap;
+}
+
+.muted {
+  color: var(--pk-ink-soft);
+}
+
+.small {
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.notice {
+  padding: 12px var(--pk-gap);
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.notice--ok {
+  background: var(--pk-teal-100);
+  color: var(--pk-teal-700);
+  margin-top: 24px;
+}
+
+.notice--ok + .hero {
+  margin-top: 0;
+}
+
+.notice--warn {
+  background: var(--pk-warn-bg);
+  color: var(--pk-warn-ink);
+}
+
+.slots {
+  display: grid;
+  gap: 20px;
+}
+
+.slots__day {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.slots__day legend {
+  padding: 0;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.slots__day legend::first-letter {
+  text-transform: uppercase;
+}
+
+.slots__times {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 8px;
+}
+
+.slots__time {
+  position: relative;
+  display: block;
+}
+
+/* The real radio button stays in the page for keyboards and screen readers but is drawn as a tile. */
+.slots__time input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.slots__time span {
+  display: grid;
+  place-items: center;
+  min-height: 52px;
+  background: var(--pk-surface);
+  border: 2px solid var(--pk-line);
+  border-radius: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.slots__time input:checked + span {
+  border-color: var(--pk-teal-600);
+  background: var(--pk-teal-50);
+  color: var(--pk-teal-700);
+}
+
+.slots__time input:focus-visible + span {
+  outline: 3px solid var(--pk-teal-600);
+  outline-offset: 2px;
+}
+
+.confirm {
+  position: fixed;
+  inset: auto 0 calc(56px + env(safe-area-inset-bottom)) 0;
+  padding: 12px var(--pk-gap);
+  background: linear-gradient(to top, var(--pk-page) 70%, transparent);
+}
+
+.confirm .pk-button {
+  display: flex;
+  max-width: 448px;
+  margin: 0 auto;
+}

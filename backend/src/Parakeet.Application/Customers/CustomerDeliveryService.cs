@@ -34,7 +34,7 @@ public class CustomerDeliveryService(IAppDbContext db, BookingService booking, T
         var postcode = order.Address.Postcode.ToString("000 00");
         return new CustomerDeliveryDto(order.OrderNumber, delivery.Status, order.DeliveryType, order.Recipient.Name,
             order.Address.Street, postcode, order.Address.City,
-            order.Lines.Select(l => new CustomerLineDto(l.Description, l.Quantity)).ToList(),
+            order.Lines.OrderBy(l => l.Description).Select(l => new CustomerLineDto(l.Description, l.Quantity)).ToList(),
             slot is null ? null : new AvailableSlot(slot.Id, slot.Date, slot.Start, slot.End),
             canChange, validThrough);
     }

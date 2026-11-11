@@ -1,0 +1,152 @@
+/* Design tokens and the few shared component styles. Change a colour here and both apps follow. */
+:root {
+  --pk-teal-700: #0f5f5c;
+  --pk-teal-600: #0f766e;
+  --pk-teal-100: #d5f1ec;
+  --pk-teal-50: #eef9f7;
+  --pk-ink: #12221f;
+  --pk-ink-soft: #4a5f5b;
+  --pk-line: #d6e2df;
+  --pk-surface: #ffffff;
+  --pk-page: #f3f7f6;
+  --pk-warn-bg: #fff4e0;
+  --pk-warn-ink: #7a4b00;
+  --pk-radius: 14px;
+  --pk-gap: 16px;
+  --pk-font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--pk-page);
+  color: var(--pk-ink);
+  font-family: var(--pk-font);
+  font-size: 16px;
+  line-height: 1.45;
+  -webkit-text-size-adjust: 100%;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+:focus-visible {
+  outline: 3px solid var(--pk-teal-600);
+  outline-offset: 2px;
+}
+
+.pk-card {
+  background: var(--pk-surface);
+  border: 1px solid var(--pk-line);
+  border-radius: var(--pk-radius);
+  padding: var(--pk-gap);
+}
+
+.pk-card__title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--pk-ink-soft);
+  margin-bottom: 8px;
+}
+
+.pk-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 48px; /* comfortable for a thumb */
+  padding: 0 20px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.pk-button--primary {
+  background: var(--pk-teal-600);
+  color: #fff;
+}
+
+.pk-button--primary:hover {
+  background: var(--pk-teal-700);
+}
+
+.pk-button--secondary {
+  background: var(--pk-surface);
+  border-color: var(--pk-teal-600);
+  color: var(--pk-teal-700);
+}
+
+.pk-button:disabled {
+  background: var(--pk-line);
+  border-color: var(--pk-line);
+  color: var(--pk-ink-soft);
+  cursor: not-allowed;
+}
+
+.pk-empty {
+  text-align: center;
+  padding: 32px var(--pk-gap);
+}
+
+.pk-empty__mark {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 12px;
+  border-radius: 50%;
+  background: var(--pk-teal-100);
+  color: var(--pk-teal-700);
+  display: grid;
+  place-items: center;
+}
+
+.pk-empty h2 {
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+}
+
+.pk-empty p {
+  color: var(--pk-ink-soft);
+}
+
+.pk-empty__action {
+  margin-top: 16px;
+}
+
+.pk-bottomnav {
+  position: fixed;
+  inset: auto 0 0 0;
+  display: flex;
+  background: var(--pk-surface);
+  border-top: 1px solid var(--pk-line);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.pk-bottomnav a {
+  flex: 1;
+  min-height: 56px;
+  display: grid;
+  place-items: center;
+  color: var(--pk-ink-soft);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-top: 3px solid transparent;
+}
+
+.pk-bottomnav a[aria-current="page"] {
+  color: var(--pk-teal-700);
+  border-top-color: var(--pk-teal-600);
+}
