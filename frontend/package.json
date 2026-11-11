@@ -1,0 +1,12 @@
+{
+  "name": "parakeet-frontend",
+  "private": true,
+  "packageManager": "pnpm@10.28.0",
+  "scripts": {
+    "gen:api": "pnpm --filter @parakeet/api gen",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "build": "pnpm -r build",
+    "dev:customer": "pnpm --filter @parakeet/customer dev"
+  }
+}

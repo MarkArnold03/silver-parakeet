@@ -1,6 +1,6 @@
 # PLAN: Delivery booking platform
 
-Status: **draft, waiting for Mark's ok.** No code until approved.
+Status: **approved by Mark 2026-11-10.** Building slice by slice (section 8).
 
 Two portals on one backend:
 
@@ -59,7 +59,7 @@ Merchant ──< Order ──< OrderLine
 
 **Merchant**: `Id`, `Name`, `ApiKeyHash`, `ApiKeyPrefix` (shown in UI to tell keys apart), `IsActive`.
 
-**Order**: `Id`, `MerchantId`, `MerchantOrderRef` (unique with MerchantId), `OrderNumber` (ours, shown to customer), `Recipient` (owned: Name, Phone, Email), `Address` (owned: Street, Postcode, City, Lat?, Lng?, `GeocodeStatus` Pending/Ok/Failed), `DeliveryType` (Curbside, Doorstep), `Lines`, `CreatedAt`.
+**Order**: `Id`, `MerchantId`, `MerchantOrderRef` (unique with MerchantId), `OrderNumber` (ours, shown to customer), `Recipient` (owned: Name, Phone, Email), `Address` (owned: Street, Postcode, City, Lat?, Lng?, `GeocodeStatus` Pending/Ok/Failed), `DeliveryType` (Curbside, Doorstep), `Lines`, `PayloadHash` (SHA-256 of the normalized create request, so a retried POST with the same ref can be told apart from a different order reusing the ref), `CreatedAt`.
 
 **OrderLine**: `Id`, `OrderId`, `ArticleNumber`, `Description`, `Quantity`, `UnitVolumeM3` (decimal 9,3), `UnitWeightKg` (decimal 9,2). The order's totals are domain properties summed from the lines.
 
@@ -104,7 +104,7 @@ AwaitingBooking ──book──► Booked ──assign──► Planned ──�
 
 - Assign and unassign go through planning, not the status endpoint.
 - `Failed` clears `RouteId`, so the delivery shows in the unplanned list (filter Booked + Failed).
-- Rebook is allowed from AwaitingBooking, Booked, Planned and Failed, before the cutoff of the **current** slot. The new slot must also be before its own cutoff. Rebooking from Planned unassigns first.
+- Rebook is allowed from AwaitingBooking, Booked, Planned and Failed. The new slot must always be before its own cutoff. From Booked and Planned the **current** slot must also be before its cutoff. AwaitingBooking has no current slot and a Failed delivery's slot is already in the past, so that check is skipped for them. Rebooking from Planned unassigns first.
 - Signing is allowed from OutForDelivery (delivery signature). The waiver can be signed any time before Delivered.
 
 ## 4. Customer links
@@ -123,6 +123,7 @@ For a zone-day:
 sellableM3 = sum(trucks.CapacityM3) * SellableVolumeRatio
 sellableKg = sum(trucks.CapacityKg)
 reservedM3/Kg = sum over deliveries with a slot in that zone-day and status not Failed
+countBooked(slot) = deliveries with that slot and status not Failed
 slot is offered to delivery D if:
   !slot.IsClosed && now < cutoff(slot.Date)
   && countBooked(slot) < slot.MaxDeliveries
@@ -152,7 +153,7 @@ The delivery's slot date must equal the route date. A delivery from another zone
 
 ## 6. API endpoints
 
-All under `/api`. OpenAPI from .NET 9's built-in `Microsoft.AspNetCore.OpenApi`. Errors are `ProblemDetails` with a stable `code` (e.g. `SlotFull`, `OverweightBlocked`, `CutoffPassed`).
+All under `/api`. OpenAPI from .NET 10's built-in `Microsoft.AspNetCore.OpenApi`. Errors are `ProblemDetails` with a stable `code` (e.g. `SlotFull`, `OverweightBlocked`, `CutoffPassed`).
 
 **Auth (dispatch)**
 | Method | Path | |
@@ -245,7 +246,7 @@ silver-parakeet/
 
 ## 8. Vertical slices
 
-Each slice ends with: all tests green, a short report to Mark (what works, what's left), small commits on `claude/project-thread-kmkrdn`.
+Each slice ends with: all tests green, a short report to Mark (what works, what's left), small commits on `claude/kind-gauss-bhc39e`.
 
 1. **Domain and database.** Solution skeleton, Domain entities + status machine, EF configurations, first migration, docker-compose SQL Server, dev seeder (dev only, behind an environment check), CLAUDE.md.
    *Tests:* status transitions, order totals from lines, postcode range overlap and lookup, migration applies to an empty SQL Server.

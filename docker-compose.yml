@@ -1,0 +1,15 @@
+# Local development database. Start with: docker compose up -d
+# The password is for local use only and matches backend/src/Parakeet.Api/appsettings.Development.json.
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Parakeet_dev_1"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+
+volumes:
+  sqlserver-data:

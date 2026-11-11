@@ -1,0 +1,10 @@
+{
+  "merchantOrderRef": "SHOP-1001",
+  "recipient": { "name": "Anna Andersson", "phone": "+46701234567", "email": "anna@example.com" },
+  "address": { "street": "Sveavägen 44", "postcode": "111 34", "city": "Stockholm" },
+  "deliveryType": "Doorstep",
+  "lines": [
+    { "articleNumber": "SOFA-3", "description": "3-sits soffa", "quantity": 1, "unitVolumeM3": 1.85, "unitWeightKg": 62.5 },
+    { "articleNumber": "TABLE-C", "description": "Soffbord", "quantity": 1, "unitVolumeM3": 0.24, "unitWeightKg": 18 }
+  ]
+}

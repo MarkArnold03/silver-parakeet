@@ -1,0 +1,3 @@
+# Generated files are compared byte for byte in CI, so they must have the same line endings on every machine.
+frontend/packages/api/openapi.json text eol=lf
+frontend/packages/api/src/schema.d.ts text eol=lf
