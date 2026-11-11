@@ -5,8 +5,10 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Parakeet.Api.Endpoints;
+using Parakeet.Application.Geocoding;
 using Parakeet.Domain.Users;
 using Parakeet.Infrastructure.Persistence;
 
@@ -26,6 +28,8 @@ public abstract class ApiTestBase(SqlServerFixture sql) : IAsyncLifetime
     private WebApplicationFactory<Program> _factory = null!;
     protected HttpClient Client { get; private set; } = null!;
     protected virtual int LoginsPerMinute => 1000;
+    protected FakeGeocoder Geocoder { get; } = new();
+    protected IServiceProvider Services => _factory.Services;
 
     public async Task InitializeAsync()
     {
@@ -34,7 +38,11 @@ public abstract class ApiTestBase(SqlServerFixture sql) : IAsyncLifetime
             .UseEnvironment("Testing")
             .UseSetting("ConnectionStrings:Default", connectionString)
             .UseSetting("Auth:JwtSigningKey", "integration-test-signing-key-0123456789abcdef")
-            .UseSetting("Auth:LoginsPerMinutePerIp", LoginsPerMinute.ToString()));
+            .UseSetting("Auth:LoginsPerMinutePerIp", LoginsPerMinute.ToString())
+            .UseSetting("CustomerLinks:SigningKey", "integration-test-customer-link-key-0123456789")
+            .UseSetting("CustomerLinks:BaseUrl", "https://book.example.test")
+            // The real geocoder calls a web service. Tests must never depend on the internet.
+            .ConfigureTestServices(services => services.AddSingleton<IGeocoder>(Geocoder)));
         // Cookies are handled by hand in the tests, so we can replay an old one on purpose.
         Client = _factory.CreateClient(new WebApplicationFactoryClientOptions { HandleCookies = false, BaseAddress = new Uri("https://localhost") });
 
@@ -84,5 +92,20 @@ public abstract class ApiTestBase(SqlServerFixture sql) : IAsyncLifetime
         Assert.True((int)response.StatusCode == expectedStatus, $"Expected {expectedStatus}, got {(int)response.StatusCode}: {text}");
         using var doc = JsonDocument.Parse(text);
         return doc.RootElement.TryGetProperty("code", out var code) ? code.GetString() : null;
+    }
+}
+
+/// <summary>Stands in for Nominatim. Counts the calls and answers whatever the test sets up.</summary>
+public class FakeGeocoder : IGeocoder
+{
+    private int _calls;
+    public int Calls => _calls;
+    public GeoPoint? Answer { get; set; } = new(59.3293, 18.0686);
+    public bool IsDown { get; set; }
+
+    public Task<GeoPoint?> FindAsync(string street, int postcode, string city, CancellationToken ct = default)
+    {
+        Interlocked.Increment(ref _calls);
+        return IsDown ? throw new HttpRequestException("The geocoder is down.") : Task.FromResult(Answer);
     }
 }

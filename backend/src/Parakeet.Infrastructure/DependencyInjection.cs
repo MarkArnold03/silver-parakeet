@@ -1,7 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Parakeet.Application;
+using Microsoft.Extensions.Options;
 using Parakeet.Application.Auth;
+using Parakeet.Application.Customers;
+using Parakeet.Application.Geocoding;
+using Parakeet.Infrastructure.Geocoding;
 using Parakeet.Infrastructure.Auth;
 using Parakeet.Infrastructure.Persistence;
 
@@ -16,6 +20,16 @@ public static class DependencyInjection
         // "What time is it" always goes through TimeProvider so tests can set the clock.
         services.AddSingleton(TimeProvider.System);
         services.AddSingleton<IAccessTokenIssuer, JwtAccessTokenIssuer>();
+        services.AddSingleton<ICustomerLinks, JwtCustomerLinks>();
+
+        services.AddSingleton<NominatimThrottle>();
+        services.AddHttpClient<IGeocoder, NominatimGeocoder>((sp, http) =>
+        {
+            var options = sp.GetRequiredService<IOptions<GeocodingOptions>>().Value;
+            http.BaseAddress = new Uri(options.BaseUrl.TrimEnd('/') + "/");
+            http.Timeout = TimeSpan.FromSeconds(options.TimeoutSeconds);
+            http.DefaultRequestHeaders.UserAgent.ParseAdd(options.UserAgent);
+        });
         return services;
     }
 }

@@ -10,10 +10,10 @@ namespace Parakeet.Infrastructure.Auth;
 
 public class JwtAccessTokenIssuer(IOptions<AuthOptions> options, TimeProvider time) : IAccessTokenIssuer
 {
-    public static SymmetricSecurityKey KeyFrom(string signingKey)
+    public static SymmetricSecurityKey KeyFrom(string signingKey, string settingName = "Auth:JwtSigningKey")
     {
         if (signingKey.Length < 32)
-            throw new InvalidOperationException("Auth:JwtSigningKey must be set to at least 32 characters.");
+            throw new InvalidOperationException($"{settingName} must be set to at least 32 characters.");
         return new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signingKey));
     }
 

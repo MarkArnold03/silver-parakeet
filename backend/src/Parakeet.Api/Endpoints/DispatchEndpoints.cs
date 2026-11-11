@@ -1,3 +1,5 @@
+using Parakeet.Application.Merchants;
+using Parakeet.Application.Orders;
 using Parakeet.Application.Slots;
 using Parakeet.Application.Trucks;
 using Parakeet.Application.Zones;
@@ -50,5 +52,13 @@ public static class DispatchEndpoints
         zoneDays.MapGet("", (DateOnly from, DateOnly to, Guid? zoneId, SlotService s, CancellationToken ct) => s.ListZoneDaysAsync(zoneId, from, to, ct));
         zoneDays.MapPut("{zoneId:guid}/{date}/trucks", (Guid zoneId, DateOnly date, SetZoneDayTrucksRequest request, SlotService s, CancellationToken ct) =>
             s.SetZoneDayTrucksAsync(zoneId, date, request, ct));
+
+        var merchants = api.MapGroup("/merchants").WithTags("Merchants");
+        merchants.MapGet("", (MerchantService s, CancellationToken ct) => s.ListAsync(ct));
+        merchants.MapPost("", (MerchantRequest request, MerchantService s, CancellationToken ct) => s.CreateAsync(request, ct));
+        merchants.MapPost("{id:guid}/api-key", (Guid id, MerchantService s, CancellationToken ct) => s.NewApiKeyAsync(id, ct));
+
+        var deliveries = api.MapGroup("/deliveries").WithTags("Deliveries");
+        deliveries.MapPost("{id:guid}/link", (Guid id, OrderService s, CancellationToken ct) => s.RegenerateLinkAsync(id, ct));
     }
 }
